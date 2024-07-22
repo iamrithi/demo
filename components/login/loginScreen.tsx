@@ -97,7 +97,9 @@ const LoginScreenSheet = () => {
   ) => {
     setIsLoading(!isLoading);
     try {
+      console.log(values)
       const user = await Axios.post("/auth/login", values);
+      console.log(user)
       await Login(user.data.data.id).then((callback: any) => {
         if (callback?.error == undefined) {
           setIsLoading(false);

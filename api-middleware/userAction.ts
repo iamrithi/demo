@@ -1,4 +1,4 @@
-"use server";
+"use server"
 import { db } from "@/lib/db";
 import * as bcrypt from "bcryptjs";
 
@@ -54,6 +54,7 @@ export const userFindByUserEmail = async (email: string) => {
 //GET USER BY ID
 
 export const userFindById = async (id: string) => {
+  console.log(id)
   return await db.user.findUnique({
     where: {
       id: id,

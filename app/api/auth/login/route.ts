@@ -1,3 +1,4 @@
+
 import { userFindByUserEmail } from "@/api-middleware/userAction";
 import { passwordVerify } from "@/api-middleware/loginAction";
 import { credentialLoginSchema } from "@/schemas";
@@ -5,6 +6,7 @@ import { credentialLoginSchema } from "@/schemas";
 export async function POST(req: Request) {
   try {
     const data = await req.json();
+    console.log(data)
     const validatedFields = credentialLoginSchema.safeParse(data);
     if (!validatedFields.success) {
       return Response.json(
