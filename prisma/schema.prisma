@@ -1,0 +1,184 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+//Enum for the user role
+enum UserRole {
+  ADMIN
+  MANAGER
+  STAFF
+  USER
+}
+
+enum Service {
+  Army
+  Air_Force
+  Navy
+}
+
+enum Grievance_Status {
+  PENDING
+  INPROGRESS
+  RESOLVED
+}
+
+//Enum for rank
+enum Rank {
+  Sep
+  LNk
+  Nk
+  Hav
+  Nb_Sub
+  Sub
+  Sub_Maj
+  Lt2
+  Lt
+  Capt
+  Maj
+  Lt_Col
+  Col
+  Brig
+  Maj_Gen
+  Lt_Gen
+  Gen
+  Fd_Marshal
+}
+
+model User {
+  id                   String      @id @default(cuid())
+  image                String?
+  name                 String      @unique
+  phone_no             String      @unique
+  email                String?     @unique
+  password             String?
+  pincode              String?
+  mobile_device_token  String?     @unique
+  service              Service?    @default(Army)
+  role                 UserRole[]
+  rank                 Rank?       @default(Sep)
+  isApproved           Boolean?    @default(false)
+  is_phone_no_verified Boolean?    @default(false)
+  isFirstLogin         Boolean?    @default(true)
+  manage_canteen       Canteen?    @relation("manage_canteen")
+  canteen_id           String?
+  canteen              Canteen?    @relation(fields: [canteen_id], references: [id], onDelete: NoAction)
+  otpToken             OtpToken?
+  grievance            Grievance[]
+}
+
+model OtpToken {
+  id         String   @id @default(cuid())
+  token      String
+  user_id    String   @unique
+  user       User     @relation(fields: [user_id], references: [id], onDelete: NoAction)
+  expiration DateTime
+}
+
+model Canteen {
+  id         String      @id @default(cuid())
+  name       String      @unique
+  unique_id  String      @unique
+  pincode    String
+  address    String?
+  phone_no   String
+  manager    User?       @relation("manage_canteen", fields: [manager_id], references: [id], onDelete: NoAction)
+  users      User[]
+  manager_id String?     @unique
+  Grievance  Grievance[]
+  stocks     Stock[]
+  Inventory  Inventory[]
+}
+
+model FaqType {
+  id   String @id @default(cuid())
+  name String @unique
+  faqs Faq[]
+}
+
+model Faq {
+  id       String  @id @default(cuid())
+  type     FaqType @relation(fields: [type_id], references: [id], onDelete: NoAction)
+  type_id  String
+  question String  @unique
+  answer   String
+}
+
+model GrievanceType {
+  id   String @id @default(cuid())
+  name String @unique
+  // grievances Grievance[]
+}
+
+// model GrievanceStatus {
+//   id         String      @id @default(cuid())
+//   name       String      @unique
+//   grievances Grievance[]
+// }
+
+model Grievance {
+  id         String           @id @default(cuid())
+  type       String
+  question   String           @unique
+  answer     String?          @default("")
+  status     Grievance_Status @default(PENDING)
+  user       User?            @relation(fields: [user_id], references: [id], onDelete: NoAction)
+  user_id    String?
+  canteen_id String?
+  canteen    Canteen?         @relation(fields: [canteen_id], references: [id], onDelete: NoAction)
+}
+
+model DocType {
+  id   String @id @default(cuid())
+  name String @unique
+  // Docs Doc[]
+}
+
+model Documents {
+  id          String @id @default(cuid())
+  name        String
+  type        String
+  description String
+  key         String
+  url         String
+}
+
+model Stock {
+  id         String    @id @default(cuid())
+  canteen_id String
+  canteen    Canteen   @relation(fields: [canteen_id], references: [id], onDelete: NoAction)
+  file_name  String
+  file_url   String
+  key        String?
+  date       DateTime? @default(now())
+}
+
+model Inventory {
+  id               Int       @id @default(autoincrement()) // SERIAL PRIMARY KEY
+  s_no             Int // INTEGER
+  index            String // TEXT
+  pluno            String // TEXT
+  item_description String // TEXT
+  stock            Int // INTEGER
+  w_rate           Decimal // NUMERIC
+  w_amt            Decimal // NUMERIC
+  r_rate           Decimal // NUMERIC
+  r_amt            Decimal // NUMERIC
+  vat_percent      Decimal // NUMERIC
+  vat_wrate        Decimal // NUMERIC
+  vat_w_amt        Decimal // NUMERIC
+  vat_rate         Decimal // NUMERIC
+  vat_r_amt        Decimal // NUMERIC
+  profit           Decimal // NUMERIC
+  mpp              Decimal // NUMERIC
+  group_name       String // TEXT
+  csd_id           String // TEXT
+  stock_id         String // TEXT
+  Canteen          Canteen[]
+
+  @@map("inventory")
+}
