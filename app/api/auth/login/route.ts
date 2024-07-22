@@ -1,5 +1,3 @@
-"use server";
-
 import { userFindByUserEmail } from "@/api-middleware/userAction";
 import { passwordVerify } from "@/api-middleware/loginAction";
 import { credentialLoginSchema } from "@/schemas";
