@@ -1,4 +1,3 @@
-"use server";
 
 import { userFindById, userFindByUserEmail } from "@/api-middleware/userAction";
 import { deleteOtpWithToken, otpVerify } from "@/api-middleware/otpAction";
