@@ -22,8 +22,11 @@ export const getAllStock = async () => {
 };
 
 export const stockFindByFilterOption = async (data: any) => {
-  return await db.stock.findMany({
+  return await db.stock.findFirst({
     where: data,
+    orderBy: {
+      date: 'desc',
+    }
   });
 };
 
