@@ -1,3 +1,4 @@
+"use server"
 import { Axios } from "@/lib/axios";
 export const getAllDocument = async () => {
   try {

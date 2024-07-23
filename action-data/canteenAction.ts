@@ -1,4 +1,4 @@
-"use server";
+"use server"
 import { Axios } from "@/lib/axios";
 export const getAllCanteen = async () => {
   try {

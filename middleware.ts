@@ -1,5 +1,4 @@
 import NextAuth from "next-auth";
-
 import authConfig from "@/auth.config";
 import {
   authRoutes,
@@ -26,6 +25,9 @@ export default auth((req: any) => {
   const token = cookieStore.get("token")?.value;
 
   const userRole = roles && checkRole(roles!);
+
+
+
   const userRoutes =
     roles &&
     roleBasedRoutes[

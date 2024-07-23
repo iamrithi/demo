@@ -1,4 +1,3 @@
-"use server"
 import { db } from "@/lib/db";
 import * as bcrypt from "bcryptjs";
 
